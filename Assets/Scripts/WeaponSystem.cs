@@ -5,7 +5,7 @@ public class WeaponSystem : MonoBehaviour
 {
     [SerializeField] Cannon[] _cannons;
 
-    private float _aimingAreaWidth = 20;
+    private float _aimingAreaWidth = 4;
     private float _aimingDistance = 100;
     private Transform _transform;
     private Vector3 _leftAimBorder;
@@ -28,11 +28,13 @@ public class WeaponSystem : MonoBehaviour
     private bool IsTargetFound()
     {
         SetAimBorders();
-        var enemiesPositions = FindObjectsOfType<Hover>().ToList();
+        var enemiesPositions = FindObjectsOfType<Hover>().Select(hover => hover.transform.position);
 
-        foreach (var enemy in enemiesPositions.Select(hover => hover.transform.position))
+        foreach (var enemy in enemiesPositions)
         {
-            if (IsHoverWithingAimZone(enemy))
+            if ((enemy - _originPosition).magnitude < _aimingDistance 
+                && IsHoverWithingAimZone(enemy)
+                && IsNoObstaclesInbetween(enemy))
                 return true;
         }
 
@@ -41,12 +43,29 @@ public class WeaponSystem : MonoBehaviour
 
     public bool IsHoverWithingAimZone(Vector3 hoverPosition)
     {
-        
+        float wholeArea = GetTriangleArea(_originPosition, _rightAimBorder, _leftAimBorder);
+        float rightArea = GetTriangleArea(_originPosition, _rightAimBorder, hoverPosition);
+        float leftArea = GetTriangleArea(_originPosition, hoverPosition, _leftAimBorder);
+        float frontArea = GetTriangleArea(hoverPosition, _rightAimBorder, _leftAimBorder);
+        return Mathf.Approximately(rightArea + leftArea + frontArea, wholeArea);
     }
 
-    private float GetTriangleArea(Vector2 pointA, Vector2 pointB, Vector2 pointC)
+    public bool IsNoObstaclesInbetween(Vector3 hoverPosition)
     {
-        return 0.5f * Mathf.Abs((pointA.x * (pointB.y - pointC.y) + pointB.x * (pointC.y - pointA.y) + pointC.x * (pointA.y - pointB.y)));
+        Debug.DrawLine(_transform.position, hoverPosition, Color.yellow);
+        Debug.DrawLine(_originPosition, hoverPosition, Color.yellow);
+        if (Physics.Linecast(_transform.position, hoverPosition, out RaycastHit hitInfo))
+        {
+            if(hitInfo.collider.TryGetComponent(out Hover hover))
+                return true;
+        }
+
+        return false;
+    }
+
+    private float GetTriangleArea(Vector3 pointA, Vector3 pointB, Vector3 pointC)
+    {
+        return 0.5f * Mathf.Abs((pointA.x * (pointB.z - pointC.z) + pointB.x * (pointC.z - pointA.z) + pointC.x * (pointA.z - pointB.z)));
     }
 
     private void SetAimBorders()
