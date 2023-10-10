@@ -1,18 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class AIStateMachine : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private AIState _currentState;
+
+    private void FixedUpdate()
     {
-        
+        Run();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Run()
     {
-        
+        AIState nextState = _currentState?.Run();
+
+        if(nextState != null)
+        {
+            SwitchToNextState(nextState);
+        }
+    }
+
+    private void SwitchToNextState(AIState nextState)
+    {
+        _currentState = nextState;
     }
 }

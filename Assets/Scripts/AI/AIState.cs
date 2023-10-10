@@ -1,39 +1,47 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(Mover))]
+[RequireComponent(typeof(Rotator))]
 public abstract class AIState : MonoBehaviour
 {
+    [SerializeField] private Waypoint[] _waypoints;
+    [SerializeField] private Player _player;
+
+    protected float _positionTolerance;
     private Transform _transform;
     private Mover _movement;
     private Rotator _rotation;
-    private Vector3 _currentDestination;
-    private Vector3 _currentRoutePoint;
     private NavMeshPath _path;
     private Queue<Vector3> _routePoints;
-    private float _positionTolerance;
-    private Player _player;
+    private Vector3 _currentTarget;
+    private Vector3 _currentRoutePoint;
     private float _chaseDistance;
-    protected AIState _nextState;
     private LayerMask _collisionLayerMask;
+    private System.Random _random;
+    private float _attackDistance;
 
-    private void Start()
+    private void Awake()
     {
+        _random = new System.Random();
+        _path = new NavMeshPath();
         _transform = transform;
         _movement = GetComponent<Mover>();
         _rotation = GetComponent<Rotator>();
-        _player = FindObjectOfType<Player>();
         _collisionLayerMask = 8;
+        _positionTolerance = 8;
+        _chaseDistance = 200;
+        _attackDistance = 50;
     }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == _collisionLayerMask)
-        {
             ResetRoute();
-        }
     }
-    public abstract AIState RunCurrentState();
+
+    public abstract AIState Run();
 
     protected bool TrySwitchRoutePoint()
     {
@@ -48,11 +56,11 @@ public abstract class AIState : MonoBehaviour
 
     protected void ResetRoute()
     {
-        GetPathToPoint(_currentDestination);
+        GetPathToPoint(_currentTarget);
         TrySwitchRoutePoint();
     }
 
-    protected bool IsPlayerInRange()
+    protected bool IsPlayerInChaseRange()
     {
         if (_player != null
             && Vector3.Distance(transform.position, _player.transform.position) < _chaseDistance)
@@ -61,7 +69,63 @@ public abstract class AIState : MonoBehaviour
         return false;
     }
 
-    protected void GetPathToPoint(Vector3 point)
+    protected bool IsDestinationReached()
+    {
+        return IsPointReached(_currentTarget);
+    }
+
+    protected bool IsRootPointReached()
+    {
+        return IsPointReached(_currentRoutePoint);
+    }
+
+    protected bool IsPlayerInAttackRange()
+    {
+        if (_player != null
+            && Vector3.Distance(transform.position, _player.transform.position) < _attackDistance)
+            return true;
+
+        return false;
+    }
+
+    protected void RotateToTarget()
+    {
+        _rotation.RotateTowardsPosition(_currentTarget);
+    }
+
+    protected void MoveToTarget()
+    {
+        GetMovementToTarget(_transform.forward, _movement.MoveForward, _movement.MoveBackward).Invoke();
+        GetMovementToTarget(_transform.right, _movement.StrafeRight, _movement.StrafeLeft).Invoke();
+    }
+
+    protected void SetRandomWaypointAsTarget()
+    {
+        int index = _random.Next(_waypoints.Length);
+        _currentTarget = _waypoints[index].transform.position;
+    }
+
+    protected void SetPlayerPositionAsTarget()
+    {
+        _currentTarget = _player.transform.position;
+    }
+
+    protected void DrawPath()
+    {
+        Debug.DrawLine(transform.position, _currentRoutePoint);
+
+        for (int i = 0; i < _path.corners.Length - 1; i++)
+        {
+            Debug.DrawLine(_path.corners[i], _path.corners[i + 1], Color.blue);
+        }
+    }
+
+    private bool IsPointReached(Vector3 point)
+    {
+        return (Vector3.Distance(_transform.position, point) < _positionTolerance);
+    }
+
+    private void GetPathToPoint(Vector3 point)
     {
         Vector3 position = _transform.position;
         _routePoints = new Queue<Vector3>();
@@ -76,17 +140,6 @@ public abstract class AIState : MonoBehaviour
                 _routePoints.Enqueue(new Vector3(_path.corners[i].x, position.y, _path.corners[i].z));
             }
         }
-    }
-
-    protected void RotateToTarget()
-    {
-        _rotation.RotateTowardsPosition(_currentRoutePoint);
-    }
-
-    protected void MoveToTarget()
-    {
-        GetMovementToTarget(_transform.forward, _movement.MoveForward, _movement.MoveBackward).Invoke();
-        GetMovementToTarget(_transform.right, _movement.StrafeRight, _movement.StrafeLeft).Invoke();
     }
 
     private System.Action GetMovementToTarget(Vector3 direction, System.Action directMove, System.Action reverseMove)

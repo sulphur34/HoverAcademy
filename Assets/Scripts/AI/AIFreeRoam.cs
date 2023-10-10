@@ -1,101 +1,46 @@
-using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.Events;
-using UnityEngine.UIElements;
 
-[RequireComponent(typeof(Mover))]
-[RequireComponent(typeof(Rotator))]
-public class AIMovement : AIState
+public class AIFreeRoam : AIState
 {
-    [SerializeField] private Waypoint[] _waypoints;
-
-    private Waypoint _currentWaypoint;
-    private System.Random _random;
-    private Vector3 _currentDestination;    
-    private Coroutine _rootTrack;
-    private NavMeshPath _path;
-    private Queue<Vector3> _route;
-    private event UnityAction _onWaypointReached;
-    private LayerMask _collisionLayerMask;
-    private float _positionTolerance;
+    [SerializeField] private AITargetChase _targetChase;
 
     private void Start()
     {
-        _random = new System.Random();
-        _path = new NavMeshPath();
-        _onWaypointReached += ResetRoute;
-        _collisionLayerMask = 8;
-        _positionTolerance = 10;
-        GetRandomWaypoint();
+        SetRandomWaypointAsTarget();
         ResetRoute();
-        
     }
 
-    private void FixedUpdate()
+    public override AIState Run()
     {
-        DrawPath(_path.corners);
-        MoveToTarget();
-        RotateToTarget();
-    }
-
-    
-
-    private void ResetRoute()
-    {
-        GetPathToPoint(_currentWaypoint.transform.position);
-
-        if (_route.Count > 0)
+        if (IsPlayerInChaseRange())
         {
-            _currentDestination = _route.Dequeue();
-            if (_rootTrack != null)
-                StopCoroutine(_rootTrack);
-
-            _rootTrack = StartCoroutine(SwitchDestination());
+            return _targetChase;
         }
         else
         {
-            GetRandomWaypoint();
-            ResetRoute();
-        }
-    }
-
-    private IEnumerator SwitchDestination()
-    {
-        while (_route.Count > 0)
-        {
-            if (Vector3.Distance(_currentDestination, _transform.position) > _positionTolerance)
+            if (IsDestinationReached())
             {
-                Debug.DrawLine(_transform.position, _currentDestination, Color.cyan);
-                yield return new WaitForFixedUpdate();
+                SetRandomWaypointAsTarget();
+                ResetRoute();
             }
-            else
+            else if (IsRootPointReached())
             {
-                _currentDestination = _route.Dequeue();
+                if (TrySwitchRoutePoint() == false)
+                    ResetRoute();
             }
+
+            if (IsPlayerInAttackRange() == false)
+            {
+                MoveToTarget();
+            }
+
+            RotateToTarget();
         }
 
-        GetRandomWaypoint();
-        _onWaypointReached.Invoke();
+        DrawPath();
+
+        return this;
     }
 
-    private void GetRandomWaypoint()
-    {
-        int index = _random.Next(_waypoints.Length);
-        _currentWaypoint = _waypoints[index];
-    }    
 
-    private void DrawPath(Vector3[] path)
-    {
-        for (int i = 0; i < path.Length - 1; i++)
-        {
-            Debug.DrawLine(path[i], path[i + 1], Color.blue);
-        }
-    }
-
-    public override AIState RunCurrentState()
-    {
-        throw new System.NotImplementedException();
-    }
 }

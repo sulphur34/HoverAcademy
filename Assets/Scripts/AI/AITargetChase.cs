@@ -1,18 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class AITargetChase : MonoBehaviour
+public class AITargetChase : AIState
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private AIFreeRoam _freeRoam;
 
-    // Update is called once per frame
-    void Update()
+    public override AIState Run()
     {
-        
-    }
+        if (IsPlayerInChaseRange() == false)
+        {
+            return _freeRoam;
+        }
+        else
+        {
+            SetPlayerPositionAsTarget();
+            ResetRoute();
+
+            if (IsPlayerInAttackRange())
+            {
+                RotateToTarget();
+            }
+            else
+            {
+                if (IsRootPointReached())
+                {
+                    if (TrySwitchRoutePoint() == false)
+                        ResetRoute();
+                }
+
+                MoveToTarget();
+                RotateToTarget();
+            }
+        }
+
+        DrawPath();
+
+        return this;
+    }   
 }
