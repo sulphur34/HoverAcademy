@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "new vehicle", menuName = "Vehicle", order = 53)]
 public class Vehicle : ScriptableObject
 {
     [SerializeField] private Hover _hoverPrefab;

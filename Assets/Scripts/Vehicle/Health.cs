@@ -9,9 +9,9 @@ public class Health : MonoBehaviour
     public float MaxHealth => _maxHealth;
     public float CurrentHealth => _currentHealth;
 
-    public void Initialize(float maxHealth)
+    public void Initialize(Vehicle vehicle)
     {
-        _maxHealth = maxHealth;
+        _maxHealth = vehicle.MaxHealth;
         _currentHealth = _maxHealth;
     }
 

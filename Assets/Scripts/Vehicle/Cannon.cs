@@ -15,7 +15,7 @@ public class Cannon : MonoBehaviour
     }
     public void Initialize(Vehicle vehicle)
     {
-        
+        _damage = vehicle.Damage;
     }
 
     public void StartFire()

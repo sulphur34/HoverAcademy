@@ -25,20 +25,25 @@ public class WeaponSystem : MonoBehaviour
             Deactivate();
     }
 
+    public void Initialize(Vehicle vehicle)
+    {
+        foreach (Cannon cannon in _cannons)
+        {
+            cannon.Initialize(vehicle);
+        }
+    }
+
     private bool IsTargetFound()
     {
         SetAimBorders();
-        var enemiesPositions = FindObjectsOfType<Hover>().Select(hover => hover.transform.position);
+        
+        var enemiesPositions = FindObjectsOfType<Hover>()
+            .Select(hover => hover.transform.position)
+            .Where(hover => (hover - _originPosition).magnitude < _aimingDistance
+            && IsHoverWithingAimZone(hover)
+            && IsNoObstaclesInbetween(hover));
 
-        foreach (var enemy in enemiesPositions)
-        {
-            if ((enemy - _originPosition).magnitude < _aimingDistance 
-                && IsHoverWithingAimZone(enemy)
-                && IsNoObstaclesInbetween(enemy))
-                return true;
-        }
-
-        return false;
+        return enemiesPositions.Count() > 0;
     }
 
     public bool IsHoverWithingAimZone(Vector3 hoverPosition)
@@ -52,12 +57,14 @@ public class WeaponSystem : MonoBehaviour
 
     public bool IsNoObstaclesInbetween(Vector3 hoverPosition)
     {
-        Debug.DrawLine(_transform.position, hoverPosition, Color.yellow);
-        Debug.DrawLine(_originPosition, hoverPosition, Color.yellow);
+        
         if (Physics.Linecast(_transform.position, hoverPosition, out RaycastHit hitInfo))
         {
             if(hitInfo.collider.TryGetComponent(out Hover hover))
+            {
+                Debug.DrawLine(_transform.position, hoverPosition, Color.yellow);
                 return true;
+            }
         }
 
         return false;

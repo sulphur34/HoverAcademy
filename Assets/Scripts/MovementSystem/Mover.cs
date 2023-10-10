@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Movement : MonoBehaviour
+public class Mover : MonoBehaviour
 {
     
     [SerializeField] private float _backwardSpeed;
@@ -8,7 +8,6 @@ public class Movement : MonoBehaviour
     [SerializeField] private float _forwardSpeed;
     [SerializeField] private float _brakeSpeed;
     [SerializeField] private float _maxVelocityMagnitude;
-    [SerializeField] private float _rotationSpeed;
 
     private Rigidbody _rigidbody;
     private Transform _transform;
@@ -19,9 +18,13 @@ public class Movement : MonoBehaviour
         _transform = transform;
     }
     
-    public void Initialize()
+    public void Initialize(Vehicle vehicle)
     {
-        
+        _backwardSpeed = vehicle.BackwardSpeed;
+        _sideSpeed = vehicle.SideSpeed;
+        _forwardSpeed = vehicle.ForwardSpeed;
+        _brakeSpeed = vehicle.BrakeSpeed;
+        _maxVelocityMagnitude = vehicle.MaxVelocityMagnitude;
     }
 
     public void MoveForward()
@@ -49,22 +52,7 @@ public class Movement : MonoBehaviour
         Vector3 stopForce = -_rigidbody.velocity.normalized;
         AddMovement(stopForce, _brakeSpeed);
     }
-
-    public void RotateLeft()
-    {
-        RotateByForce(-_rotationSpeed);
-    }
-
-    public void RotateRight()
-    {
-        RotateByForce(_rotationSpeed);
-    }
-
-    private void RotateByForce(float rotationSpeed)
-    {
-        _rigidbody.AddTorque(new Vector3(0f, rotationSpeed, 0f));
-    }
-
+   
     private void AddMovement(Vector3 direction, float _speed)
     {
         float changedMagnitude = (_rigidbody.velocity + direction).magnitude;

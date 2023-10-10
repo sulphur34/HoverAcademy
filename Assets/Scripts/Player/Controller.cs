@@ -1,14 +1,14 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-[RequireComponent(typeof(Movement))]
+[RequireComponent(typeof(Mover))]
 public class Controller : MonoBehaviour
 {
-    private Movement _movement;
+    private Mover _movement;
 
     private void Start()
     {
-        _movement = GetComponent<Movement>();
+        _movement = GetComponent<Mover>();
     }
 
     private void Update()
