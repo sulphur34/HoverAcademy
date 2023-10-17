@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb67a46077e27e9418670b3e425e1e11, type: 3}
+  m_Name: HeavyTruck
+  m_EditorClassIdentifier: 
+  _hoverPrefab: {fileID: -8795796167648480403, guid: 1dd8bd08ee0092645bd3f5b6ffc98c06, type: 3}
+  _forwardSpeed: 500
+  _backwardSpeed: 500
+  _sideSpeed: 500
+  _brakeSpeed: 500
+  _maxVelocityMagnitude: 30
+  _rotationSpeed: 0.1
+  _engineMaxDistance: 10
+  _engineMaxForce: 6
+  _engineDamping: 2000
+  _engineProgressivity: 1.75
+  _engineUpFactor: 0.75
+  _aimingAreaWidth: 4
+  _aimingDistance: 100
+  _maxHealth: 2000
+  _damage: 20

@@ -1,8 +1,14 @@
 using UnityEngine;
 
+//[RequireComponent(typeof(AIFreeRoam))]
 public class AITargetChase : AIState
 {
-    [SerializeField] private AIFreeRoam _freeRoam;
+    private AIFreeRoam _freeRoam;
+
+    private void Start()
+    {
+        _freeRoam = GetComponent<AIFreeRoam>();
+    }
 
     public override AIState Run()
     {

@@ -1,14 +1,16 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Mover))]
+[RequireComponent (typeof(Rotator))]
 public class Controller : MonoBehaviour
 {
     private Mover _movement;
+    private Rotator _rotation;
 
     private void Start()
     {
         _movement = GetComponent<Mover>();
+        _rotation = GetComponent<Rotator>();
     }
 
     private void Update()
@@ -38,5 +40,10 @@ public class Controller : MonoBehaviour
         {
             _movement.Brake();
         }
+    }
+
+    public void FixedUpdate()
+    {
+        _rotation.RotateTowardsDirection(Camera.main.transform.forward);
     }
 }

@@ -1,13 +1,20 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Health : MonoBehaviour
 {
-    private float _maxHealth;
-    private float _minHealth = 0;
-    private float _currentHealth;
+    [SerializeField] private float _maxHealth = 200;
+    [SerializeField] private float _currentHealth = 200;
 
-    public float MaxHealth => _maxHealth;
+    private float _minHealth = 0;    
+    private bool IsAlive = true;
+
+    public event UnityAction HealthChanged;
+    public event UnityAction Death;
+
     public float CurrentHealth => _currentHealth;
+    public float MaxHealth => _maxHealth;
+
 
     public void Initialize(Vehicle vehicle)
     {
@@ -19,19 +26,20 @@ public class Health : MonoBehaviour
     {
         _currentHealth += restoreValue;
         _currentHealth = Mathf.Clamp(_currentHealth, _minHealth, _maxHealth);
+        HealthChanged?.Invoke();
     }
 
     public void Damage(float damageValue)
     {
-        _currentHealth -= damageValue;
-        _currentHealth = Mathf.Clamp(_currentHealth, _minHealth, _maxHealth);
+        Restore(-damageValue);
 
-        if (_currentHealth == _minHealth)
+        if (_currentHealth == _minHealth && IsAlive)
             Die();
     }
 
     public void Die()
     {
-
+        IsAlive = false;
+        Death?.Invoke();
     }
 }

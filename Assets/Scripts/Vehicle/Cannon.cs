@@ -13,6 +13,13 @@ public class Cannon : MonoBehaviour
         EndFire();
         _damage = 5;
     }
+
+    private void OnParticleCollision(GameObject other)
+    {
+        if (other.TryGetComponent(out Health health))
+            health.Damage(_damage);
+    }
+
     public void Initialize(Vehicle vehicle)
     {
         _damage = vehicle.Damage;

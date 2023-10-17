@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Engine : MonoBehaviour
 {
-    [SerializeField] private Rigidbody _rigidbody;
+    
     [SerializeField] private float _maxDistance = 2f;
     [SerializeField] private LayerMask _layerMask;
     [SerializeField] private float _maxForce;
@@ -13,10 +13,12 @@ public class Engine : MonoBehaviour
     private Transform _transform;
     private Vector3 _engineWorldSpeed;
     private Vector3 _engineWorldOldPosition;
+    private Rigidbody _rigidbody;
 
     private void Awake()
     {
         _transform = transform;
+        _rigidbody = GetComponentInParent<Rigidbody>();
     }
 
     private void FixedUpdate()
@@ -30,6 +32,14 @@ public class Engine : MonoBehaviour
         }
 
         Damping(forceDirection);
+    }
+    public void Initialize(Vehicle vehicle)
+    {
+        _maxDistance = vehicle.EngineMaxDistance;
+        _maxForce = vehicle.EngineMaxForce;
+        _damping = vehicle.EngineDamping;
+        _progressivity = vehicle.EngineProgressivity;
+        _upFactor = vehicle.EngineUpFactor;
     }
 
     private void Lift(Vector3 forward, float distance, out Vector3 forceDirection)
@@ -49,5 +59,5 @@ public class Engine : MonoBehaviour
         _rigidbody.AddForceAtPosition(-forceDirection * _engineWorldSpeed.magnitude * dotResult * _damping, _transform.position, ForceMode.Force);
 
         _engineWorldOldPosition = _transform.position;
-    }
+    }    
 }

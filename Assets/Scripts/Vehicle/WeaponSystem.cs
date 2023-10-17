@@ -10,7 +10,7 @@ public class WeaponSystem : MonoBehaviour
     private Transform _transform;
     private Vector3 _leftAimBorder;
     private Vector3 _rightAimBorder;
-    private Vector3 _originPosition;
+    private Vector3 _originPosition;    
 
     private void Awake()
     {
@@ -19,21 +19,44 @@ public class WeaponSystem : MonoBehaviour
 
     private void Update()
     {
-        if (IsTargetFound())
-            Activate();
+        if (TryGetTarget(out Vector3 targetPosition))
+        {
+            Activate(targetPosition);
+        }
         else
+        {
             Deactivate();
+        }
     }
 
     public void Initialize(Vehicle vehicle)
     {
+        _aimingAreaWidth = vehicle.AimingAreaWidth;
+        _aimingDistance = vehicle.AimingDistance;
+
         foreach (Cannon cannon in _cannons)
         {
             cannon.Initialize(vehicle);
         }
     }
+    public void Activate(Vector3 targetPosition)
+    {
+        foreach (Cannon cannon in _cannons)
+        {
+            cannon.transform.LookAt(targetPosition);
+            cannon.StartFire();
+        }
+    }
 
-    private bool IsTargetFound()
+    public void Deactivate()
+    {
+        foreach (Cannon cannon in _cannons)
+        {
+            cannon.EndFire();
+        }
+    }
+
+    private bool TryGetTarget(out Vector3 targetPosition)
     {
         SetAimBorders();
         
@@ -43,10 +66,12 @@ public class WeaponSystem : MonoBehaviour
             && IsHoverWithingAimZone(hover)
             && IsNoObstaclesInbetween(hover));
 
+        targetPosition = enemiesPositions.FirstOrDefault();
+
         return enemiesPositions.Count() > 0;
     }
 
-    public bool IsHoverWithingAimZone(Vector3 hoverPosition)
+    private bool IsHoverWithingAimZone(Vector3 hoverPosition)
     {
         float wholeArea = GetTriangleArea(_originPosition, _rightAimBorder, _leftAimBorder);
         float rightArea = GetTriangleArea(_originPosition, _rightAimBorder, hoverPosition);
@@ -55,7 +80,7 @@ public class WeaponSystem : MonoBehaviour
         return Mathf.Approximately(rightArea + leftArea + frontArea, wholeArea);
     }
 
-    public bool IsNoObstaclesInbetween(Vector3 hoverPosition)
+    private bool IsNoObstaclesInbetween(Vector3 hoverPosition)
     {
         
         if (Physics.Linecast(_transform.position, hoverPosition, out RaycastHit hitInfo))
@@ -84,47 +109,5 @@ public class WeaponSystem : MonoBehaviour
         Debug.DrawLine(_rightAimBorder, _leftAimBorder, Color.green);
         Debug.DrawLine(transform.position, _leftAimBorder, Color.red);
         Debug.DrawLine(transform.position, _rightAimBorder, Color.red);
-    }
-
-    //private void SetRaycastDirections()
-    //{
-    //    Vector3 forward = _transform.forward;
-    //    Vector3 origin = _transform.position;
-    //    int index = 0;
-
-    //    for (float i = -2; i <= 2; i++)
-    //    {
-    //        for (float j = -2; j <= 2; j++)
-    //        {
-    //            Vector3 direction = Quaternion.Euler(i * _aimingAreaWidth, j * _aimingAreaWidth, 0) * forward;
-    //            _rays[index++] = new Ray(origin, direction);
-    //        }
-    //    }
-    //}
-
-    //private void GenerateRaycasts()
-    //{
-    //    for (int i = 0; i < _raycastNumber; i++)
-    //    {
-    //        Debug.DrawRay(_rays[i].origin, _rays[i].direction * 100, Color.red);
-    //        if (Physics.Raycast(_rays[i], out RaycastHit hitInfo))
-    //            Debug.DrawRay(transform.position, hitInfo.point, Color.yellow);
-    //    }
-    //}
-
-    public void Activate()
-    {
-        foreach (Cannon cannon in _cannons)
-        {
-            cannon.StartFire();
-        }
-    }
-
-    public void Deactivate()
-    {
-        foreach (Cannon cannon in _cannons)
-        {
-            cannon.EndFire();
-        }
-    }
+    }   
 }

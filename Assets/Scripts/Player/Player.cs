@@ -1,12 +1,21 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Hover))]
+[RequireComponent (typeof(Controller))]
 public class Player : MonoBehaviour
 {
-    [SerializeField] private Hover _hover;
+    private Hover _hover;
+    private Controller _controller;
 
-    public void FixedUpdate()
+    private void Start()
     {
-        _hover.GetComponent<Rotator>().RotateTowardsDirection(Camera.main.transform.forward);
+        _controller = GetComponent<Controller>();
+        _hover = GetComponent<Hover>();
+        _hover.Health.Death += DisableControls;
+    }
+
+    private void DisableControls()
+    {
+        _controller.enabled = false;
     }
 }

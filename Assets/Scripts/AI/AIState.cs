@@ -6,10 +6,9 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Rotator))]
 public abstract class AIState : MonoBehaviour
 {
-    [SerializeField] private Waypoint[] _waypoints;
-    [SerializeField] private Player _player;
-
-    protected float _positionTolerance;
+    private float _positionTolerance;
+    private Waypoint[] _waypoints;
+    private Player _player;
     private Transform _transform;
     private Mover _movement;
     private Rotator _rotation;
@@ -39,6 +38,12 @@ public abstract class AIState : MonoBehaviour
     {
         if (collision.gameObject.layer == _collisionLayerMask)
             ResetRoute();
+    }
+
+    public void Initialize(Waypoint[] waypoints, Player player)
+    {
+        _waypoints = waypoints;
+        _player = player;
     }
 
     public abstract AIState Run();

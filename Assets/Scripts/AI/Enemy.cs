@@ -1,18 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(AIStateMachine))]
+[RequireComponent (typeof(Health))]
 public class Enemy : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
+{ 
+    private AIStateMachine _stateMachine;
+    private Health _health;
+
+    void Awake()
     {
-        
+        _stateMachine = GetComponent<AIStateMachine> ();
+        _health = GetComponent<Health> ();
+        _health.Death += OnDeath;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Initialize(Waypoint[] waypoints, Player player)
     {
-        
+        GetComponent<AIFreeRoam>().Initialize(waypoints, player);
+        GetComponent<AITargetChase>().Initialize(waypoints, player);
+        _stateMachine.Enable();
+    }
+
+    public void OnDeath()
+    {
+        _stateMachine.Disable();
+    }
+
+    public void Reset()
+    {
+        _stateMachine.Enable();
     }
 }
