@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class WeaponSystem : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class WeaponSystem : MonoBehaviour
     private Transform _transform;
     private Vector3 _leftAimBorder;
     private Vector3 _rightAimBorder;
-    private Vector3 _originPosition;    
+    private Vector3 _originPosition;
+    private Type _enemyType;
 
     private void Awake()
     {
@@ -29,8 +31,9 @@ public class WeaponSystem : MonoBehaviour
         }
     }
 
-    public void Initialize(Vehicle vehicle)
+    public void Initialize(Vehicle vehicle, Type enemyType)
     {
+        _enemyType = enemyType;
         _aimingAreaWidth = vehicle.AimingAreaWidth;
         _aimingDistance = vehicle.AimingDistance;
 
@@ -60,8 +63,8 @@ public class WeaponSystem : MonoBehaviour
     {
         SetAimBorders();
         
-        var enemiesPositions = FindObjectsOfType<Hover>()
-            .Select(hover => hover.transform.position)
+        var enemiesPositions = FindObjectsOfType(_enemyType)
+            .Select(hover => ((MonoBehaviour)hover).transform.position)
             .Where(hover => (hover - _originPosition).magnitude < _aimingDistance
             && IsHoverWithingAimZone(hover)
             && IsNoObstaclesInbetween(hover));

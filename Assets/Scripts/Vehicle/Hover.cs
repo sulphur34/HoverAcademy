@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -29,12 +30,12 @@ public class Hover : MonoBehaviour
         _health.Death += Disable;
     }
 
-    public void Initialize(Vehicle vehicle)
+    public void Initialize(Vehicle vehicle, Type enemyType)
     {
         _rotation.Initialize(vehicle);
         _mover.Initialize(vehicle);
         _health.Initialize(vehicle);
-        _weaponSystem.Initialize(vehicle);
+        _weaponSystem.Initialize(vehicle, enemyType);
         _engineSystem.Initialize(vehicle);
     }
 

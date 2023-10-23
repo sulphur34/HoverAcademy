@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+using System.Collections;
 using UnityEngine;
 
 public class EnemySpawner : ObjectPool
@@ -7,21 +7,21 @@ public class EnemySpawner : ObjectPool
     [SerializeField] private Transform[] _spawnPositions;
     [SerializeField] private Waypoint[] _waypoints;
 
-    private Hover[] _enemies;
     private Player _player;
-
-    private void Start()
+    
+    public IEnumerator SpawnEnemies(float enemiesAmount)
     {
         _player = FindObjectOfType<Player>();
-        Initialize(_vehicles);
+        Initialize(_vehicles, enemiesAmount);
+
+        for (int i = 0; i < enemiesAmount; i++)
+        {
+            TrySpawnEnemy(out GameObject result);
+            yield return new WaitForSeconds(2);
+        }
     }
 
-    private void Update()
-    {
-        SpawnEnemy(out GameObject result);
-    }
-
-    private void SpawnEnemy(out GameObject result)
+    private bool TrySpawnEnemy(out GameObject result)
     {
         int index = _random.Next(_vehicles.Length);
 
@@ -29,15 +29,19 @@ public class EnemySpawner : ObjectPool
         {
             enemy.SetActive(true);
             enemy.transform.position = _spawnPositions[index].position;
+            result = enemy;
+            return true;
         }
 
-        result = enemy;
+        result = null;
+        return false;
     }
+
     protected override GameObject GetRandomContainer(Vehicle[] prefabs)
     {
         int index = _random.Next(prefabs.Length);
-        GameObject gameObject = prefabs[index].BuildHover(_container.transform);
-        gameObject.GetComponent<Enemy>().Initialize(_waypoints, _player);
-        return gameObject;
+        Hover hover = prefabs[index].BuildHover(transform, typeof(Player));
+        hover.gameObject.GetComponent<Enemy>().Initialize(_waypoints, _player);
+        return hover.gameObject;
     }
 }

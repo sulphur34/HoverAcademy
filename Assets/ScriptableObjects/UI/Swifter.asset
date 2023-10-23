@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 055a652648258724a98bb546e4f4b175, type: 3}
+  m_Name: Swifter
+  m_EditorClassIdentifier: 
+  _vehicle: {fileID: 11400000, guid: 53d440d0df713974aa4046b2a0b96e6f, type: 2}
+  _armorValue: 2
+  _damageValue: 3
+  _speedValue: 3
+  _handlingValue: 4
+  _name: Blinker Swifter
+  _logo: {fileID: 2800000, guid: b85c604daf07b1c4f961d49d60d0b201, type: 3}

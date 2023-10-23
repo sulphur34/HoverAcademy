@@ -15,7 +15,6 @@ public class Health : MonoBehaviour
     public float CurrentHealth => _currentHealth;
     public float MaxHealth => _maxHealth;
 
-
     public void Initialize(Vehicle vehicle)
     {
         _maxHealth = vehicle.MaxHealth;

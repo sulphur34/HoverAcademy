@@ -24,7 +24,7 @@ MonoBehaviour:
   _engineDamping: 2000
   _engineProgressivity: 1.75
   _engineUpFactor: 0.75
-  _aimingAreaWidth: 4
-  _aimingDistance: 100
-  _maxHealth: 2000
+  _aimingAreaWidth: 1
+  _aimingDistance: 200
+  _maxHealth: 200
   _damage: 20

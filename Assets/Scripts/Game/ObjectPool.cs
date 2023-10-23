@@ -1,14 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public abstract class ObjectPool : MonoBehaviour
 {
-    [SerializeField] protected GameObject _container;
-    [SerializeField] private int _capacity;
-
     protected System.Random _random;
     private List<GameObject> _pool;
+    private int _capacity = 5;
+
+    public int ActiveItemsLeft => _pool.Where(item => item.gameObject.activeSelf).Count();
 
     public void Reset()
     {
@@ -29,6 +30,12 @@ public abstract class ObjectPool : MonoBehaviour
             spawned.SetActive(false);
             _pool.Add(spawned);
         }
+    }
+
+    protected void Initialize(Vehicle[] prefabs, float itemsAmount)
+    {
+        _capacity = Convert.ToInt32(itemsAmount);
+        Initialize(prefabs);
     }
 
     protected void Initialize(Vehicle prefab)

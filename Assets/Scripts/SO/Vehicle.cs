@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new vehicle", menuName = "Vehicle", order = 53)]
@@ -41,10 +42,10 @@ public class Vehicle : ScriptableObject
     public float MaxHealth => _maxHealth;
     public float Damage => _damage;
     
-    public GameObject BuildHover(Transform container)
+    public Hover BuildHover(Transform container, Type enemyType)
     {
         Hover hover = Instantiate(_hoverPrefab.gameObject, container).GetComponent<Hover>();
-        hover.Initialize(this);
-        return hover.gameObject;
+        hover.Initialize(this, enemyType);
+        return hover;
     }
 }

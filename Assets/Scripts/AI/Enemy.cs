@@ -1,17 +1,19 @@
 using UnityEngine;
 
 [RequireComponent(typeof(AIStateMachine))]
-[RequireComponent (typeof(Health))]
+[RequireComponent (typeof(Hover))]
 public class Enemy : MonoBehaviour
 { 
     private AIStateMachine _stateMachine;
-    private Health _health;
+    private Hover _hover;
+    private EnemySpawner _spawner;
 
     void Awake()
     {
         _stateMachine = GetComponent<AIStateMachine> ();
-        _health = GetComponent<Health> ();
-        _health.Death += OnDeath;
+        _hover = GetComponent<Hover> ();
+        _hover.Health.Death += OnDeath;
+        _spawner = GetComponentInParent<EnemySpawner> ();
     }
 
     public void Initialize(Waypoint[] waypoints, Player player)
