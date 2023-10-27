@@ -17,14 +17,14 @@ MonoBehaviour:
   _backwardSpeed: 500
   _sideSpeed: 500
   _brakeSpeed: 500
-  _maxVelocityMagnitude: 30
-  _rotationSpeed: 0.1
-  _engineMaxDistance: 10
+  _maxVelocityMagnitude: 40
+  _rotationSpeed: 0.07
+  _engineMaxDistance: 20
   _engineMaxForce: 6
   _engineDamping: 2000
-  _engineProgressivity: 3
+  _engineProgressivity: 1.75
   _engineUpFactor: 0.75
-  _aimingAreaWidth: 1
+  _aimingAreaWidth: 2
   _aimingDistance: 200
-  _maxHealth: 200
-  _damage: 20
+  _maxHealth: 150
+  _damage: 25

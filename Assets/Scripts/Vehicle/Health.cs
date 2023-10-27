@@ -6,14 +6,20 @@ public class Health : MonoBehaviour
     [SerializeField] private float _maxHealth = 200;
     [SerializeField] private float _currentHealth = 200;
 
-    private float _minHealth = 0;    
-    private bool IsAlive = true;
+    private float _minHealth = 0;
+    private bool _isAlive = true;
 
     public event UnityAction HealthChanged;
     public event UnityAction Death;
+    public event UnityAction HealthReset;
 
     public float CurrentHealth => _currentHealth;
     public float MaxHealth => _maxHealth;
+
+    private void OnEnable()
+    {
+        HealthChanged?.Invoke();
+    }
 
     public void Initialize(Vehicle vehicle)
     {
@@ -32,13 +38,20 @@ public class Health : MonoBehaviour
     {
         Restore(-damageValue);
 
-        if (_currentHealth == _minHealth && IsAlive)
+        if (_currentHealth == _minHealth && _isAlive)
             Die();
+    }
+
+    public void Reset()
+    {
+        Restore(_maxHealth);
+        _isAlive = true;
+        HealthReset?.Invoke();
     }
 
     public void Die()
     {
-        IsAlive = false;
+        _isAlive = false;
         Death?.Invoke();
     }
 }

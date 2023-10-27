@@ -14,17 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _hoverPrefab: {fileID: -1749666552040649037, guid: e0087afd25a68a149a7388dfbca9adc2, type: 3}
   _forwardSpeed: 500
-  _backwardSpeed: 500
-  _sideSpeed: 500
-  _brakeSpeed: 500
-  _maxVelocityMagnitude: 30
-  _rotationSpeed: 0.1
-  _engineMaxDistance: 10
+  _backwardSpeed: 100
+  _sideSpeed: 150
+  _brakeSpeed: 100
+  _maxVelocityMagnitude: 50
+  _rotationSpeed: 0.05
+  _engineMaxDistance: 20
   _engineMaxForce: 6
   _engineDamping: 2000
   _engineProgressivity: 1.75
   _engineUpFactor: 0.75
   _aimingAreaWidth: 10
-  _aimingDistance: 100
-  _maxHealth: 2000
-  _damage: 20
+  _aimingDistance: 200
+  _maxHealth: 1000
+  _damage: 50

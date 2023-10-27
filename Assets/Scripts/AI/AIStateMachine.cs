@@ -1,30 +1,15 @@
 using System.Collections;
 using UnityEngine;
+
 [RequireComponent(typeof(AIFreeRoam))]
 public class AIStateMachine : MonoBehaviour
 {
     private AIState _currentState;
     private Coroutine _coroutine;
 
-    private void Start()
+    private void Awake()
     {
-        _coroutine = StartCoroutine(Run());
         _currentState = GetComponent<AIFreeRoam>();
-    }
-
-    private IEnumerator Run()
-    {
-        bool isContinue = true;
-
-        while (isContinue)
-        {
-            AIState nextState = _currentState?.Run();
-
-            if (nextState != null)
-                SwitchToNextState(nextState);
-
-            yield return new WaitForFixedUpdate();
-        }
     }
 
     public void SetDefaultState(AIState defaultState)
@@ -40,6 +25,21 @@ public class AIStateMachine : MonoBehaviour
     public void Disable()
     {
         StopCoroutine(_coroutine);
+    }
+
+    private IEnumerator Run()
+    {
+        bool isContinue = true;
+
+        while (isContinue)
+        {
+            AIState nextState = _currentState?.Run();
+
+            if (nextState != null)
+                SwitchToNextState(nextState);
+
+            yield return new WaitForFixedUpdate();
+        }
     }
 
     private void SwitchToNextState(AIState nextState)

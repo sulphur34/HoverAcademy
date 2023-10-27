@@ -24,6 +24,7 @@ public class EngineSystem : MonoBehaviour
     {
         PickRandomEngine().enabled = false;
         PickRandomEngine().enabled = false;
+        PickRandomEngine().enabled = false;
     }
 
     public void Restore()

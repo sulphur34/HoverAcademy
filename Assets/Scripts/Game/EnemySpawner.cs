@@ -8,6 +8,7 @@ public class EnemySpawner : ObjectPool
     [SerializeField] private Waypoint[] _waypoints;
 
     private Player _player;
+    private float _spawnDelay = 1;
     
     public IEnumerator SpawnEnemies(float enemiesAmount)
     {
@@ -17,7 +18,7 @@ public class EnemySpawner : ObjectPool
         for (int i = 0; i < enemiesAmount; i++)
         {
             TrySpawnEnemy(out GameObject result);
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(_spawnDelay);
         }
     }
 

@@ -1,15 +1,13 @@
 using UnityEngine;
 
-//[RequireComponent(typeof(AITargetChase))]
+[RequireComponent(typeof(AITargetChase))]
 public class AIFreeRoam : AIState
 {
     private AITargetChase _targetChase;
 
-    private void Start()
+    private void OnEnable()
     {
         _targetChase = GetComponent<AITargetChase> ();
-        SetRandomWaypointAsTarget();
-        ResetRoute();
     }
 
     public override AIState Run()

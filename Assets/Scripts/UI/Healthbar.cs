@@ -15,6 +15,7 @@ public class Healthbar : MonoBehaviour
     private void OnEnable()
     {
         _health.HealthChanged += OnHealthChanged;
+        _health.HealthReset += SetStartValues;
     }
 
     private void Start()

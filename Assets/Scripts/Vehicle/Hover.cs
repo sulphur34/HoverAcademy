@@ -17,6 +17,7 @@ public class Hover : MonoBehaviour
     private Rotator _rotation;
     private Mover _mover;
     private Health _health;
+    private Transform _transform;
 
     public Health Health => _health;
 
@@ -28,6 +29,17 @@ public class Hover : MonoBehaviour
         _mover = GetComponent<Mover>();
         _health = GetComponent<Health>();
         _health.Death += Disable;
+        _transform = transform;
+    }
+
+    private void OnEnable()
+    {
+        Restore();
+    }
+
+    private void Update()
+    {
+        FixOutOfBounds();
     }
 
     public void Initialize(Vehicle vehicle, Type enemyType)
@@ -45,14 +57,15 @@ public class Hover : MonoBehaviour
     }
 
     public IEnumerator Crash()
-    {
+    {        
+        float crashForce = 200;
+        float crashTorque = 500;
+        float crashDelay = 2;
+        var rigidbody = GetComponent<Rigidbody>();
         _engineSystem.Crash();
         _weaponSystem.Deactivate();
+        _rotation.enabled = false;
         _weaponSystem.enabled = false;
-        float crashForce = 20;
-        float crashTorque = 100;
-        float crashDelay = 2;
-        var rigidbody = GetComponent<Rigidbody>();        
         rigidbody.AddForce(transform.up * crashForce);
         rigidbody.AddTorque(transform.right * crashTorque);
         Instantiate(_burst, transform).Play();
@@ -66,5 +79,15 @@ public class Hover : MonoBehaviour
     {
         _engineSystem.Restore();
         _weaponSystem.enabled=true;
+        _rotation.enabled = true;
+        _health.Reset();
+    }
+
+    private void FixOutOfBounds()
+    {
+        float fixPositionY = 6f;
+
+        if (_transform.position.y < 0)
+            _transform.position = new Vector3(_transform.position.x, fixPositionY, transform.position.z);
     }
 }

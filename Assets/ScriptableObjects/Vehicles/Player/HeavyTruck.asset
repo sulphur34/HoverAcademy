@@ -13,18 +13,18 @@ MonoBehaviour:
   m_Name: HeavyTruck
   m_EditorClassIdentifier: 
   _hoverPrefab: {fileID: -8795796167648480403, guid: 1dd8bd08ee0092645bd3f5b6ffc98c06, type: 3}
-  _forwardSpeed: 500
-  _backwardSpeed: 500
-  _sideSpeed: 500
-  _brakeSpeed: 500
+  _forwardSpeed: 200
+  _backwardSpeed: 100
+  _sideSpeed: 150
+  _brakeSpeed: 100
   _maxVelocityMagnitude: 30
-  _rotationSpeed: 0.1
-  _engineMaxDistance: 10
+  _rotationSpeed: 0.07
+  _engineMaxDistance: 20
   _engineMaxForce: 6
   _engineDamping: 2000
   _engineProgressivity: 1.75
   _engineUpFactor: 0.75
   _aimingAreaWidth: 10
-  _aimingDistance: 100
-  _maxHealth: 2000
-  _damage: 20
+  _aimingDistance: 200
+  _maxHealth: 20000
+  _damage: 800

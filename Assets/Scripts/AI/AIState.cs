@@ -32,6 +32,7 @@ public abstract class AIState : MonoBehaviour
         _positionTolerance = 8;
         _chaseDistance = 200;
         _attackDistance = 50;
+        _currentTarget = _transform.position;
     }
 
     private void OnCollisionEnter(Collision collision)
