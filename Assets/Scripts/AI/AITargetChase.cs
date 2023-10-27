@@ -1,6 +1,6 @@
 using UnityEngine;
 
-//[RequireComponent(typeof(AIFreeRoam))]
+[RequireComponent(typeof(AIFreeRoam))]
 public class AITargetChase : AIState
 {
     private AIFreeRoam _freeRoam;
@@ -37,8 +37,6 @@ public class AITargetChase : AIState
                 RotateToTarget();
             }
         }
-
-        DrawPath();
 
         return this;
     }   

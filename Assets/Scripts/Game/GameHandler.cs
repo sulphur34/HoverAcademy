@@ -59,6 +59,7 @@ public class GameHandler : MonoBehaviour
         if (_enemiesKilled == _enemiesToKill) 
             Win();
     }
+
     private IEnumerator OnGameEnd()
     {
         _hud.gameObject.SetActive(false);
@@ -74,8 +75,7 @@ public class GameHandler : MonoBehaviour
     {
         _endGameCoroutine = StartCoroutine(OnGameEnd());
         _winMenu.gameObject.SetActive(true);
-        _winMenu.GetComponent<WinMenu>().Initialize(_enemiesKilled);
-        
+        _winMenu.GetComponent<WinMenu>().Initialize(_enemiesKilled);        
     }
 
     private void Loose()

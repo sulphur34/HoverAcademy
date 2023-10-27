@@ -6,9 +6,6 @@ using UnityEngine.UI;
 
 public class SelectionMenu : MonoBehaviour
 {
-    [SerializeField] private Button _startButton;
-    [SerializeField] private Button _leftSelectionButton;
-    [SerializeField] private Button _rightSelectionButton;
     [SerializeField] private Slider _enemiesNumberSlider;
     [SerializeField] private TextMeshProUGUI _enemiesValueLabel;
     [SerializeField] private GameObject _hoverSelectionPlatform;
@@ -72,6 +69,7 @@ public class SelectionMenu : MonoBehaviour
         else
             _currentVehiclePosition = 0;
     }
+
     private void SwitchVehicleIndexDown()
     {
         if (_currentVehiclePosition > 0)

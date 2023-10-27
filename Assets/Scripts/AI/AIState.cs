@@ -116,16 +116,6 @@ public abstract class AIState : MonoBehaviour
         _currentTarget = _player.transform.position;
     }
 
-    protected void DrawPath()
-    {
-        Debug.DrawLine(transform.position, _currentRoutePoint);
-
-        for (int i = 0; i < _path.corners.Length - 1; i++)
-        {
-            Debug.DrawLine(_path.corners[i], _path.corners[i + 1], Color.blue);
-        }
-    }
-
     private bool IsPointReached(Vector3 point)
     {
         return (Vector3.Distance(_transform.position, point) < _positionTolerance);

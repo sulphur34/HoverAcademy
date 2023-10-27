@@ -90,7 +90,6 @@ public class WeaponSystem : MonoBehaviour
         {
             if(hitInfo.collider.TryGetComponent(out Hover hover))
             {
-                Debug.DrawLine(_transform.position, hoverPosition, Color.yellow);
                 return true;
             }
         }
@@ -109,8 +108,5 @@ public class WeaponSystem : MonoBehaviour
         Vector3 forward = new Vector3(_transform.forward.x, 0f, _transform.forward.z);
         _leftAimBorder = Quaternion.Euler(0f, -_aimingAreaWidth, 0f) * forward * _aimingDistance + _originPosition;
         _rightAimBorder = Quaternion.Euler(0f, _aimingAreaWidth, 0f) * forward * _aimingDistance + _originPosition;
-        Debug.DrawLine(_rightAimBorder, _leftAimBorder, Color.green);
-        Debug.DrawLine(transform.position, _leftAimBorder, Color.red);
-        Debug.DrawLine(transform.position, _rightAimBorder, Color.red);
     }   
 }

@@ -1,8 +1,8 @@
 using UnityEngine;
 
+[RequireComponent (typeof(Rigidbody))]
 public class Mover : MonoBehaviour
-{
-    
+{    
     [SerializeField] private float _backwardSpeed;
     [SerializeField] private float _sideSpeed;
     [SerializeField] private float _forwardSpeed;

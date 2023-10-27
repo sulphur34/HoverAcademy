@@ -22,6 +22,14 @@ public class EnemySpawner : ObjectPool
         }
     }
 
+    protected override GameObject GetRandomContainer(Vehicle[] prefabs)
+    {
+        int index = _random.Next(prefabs.Length);
+        Hover hover = prefabs[index].BuildHover(transform, typeof(Player));
+        hover.gameObject.GetComponent<Enemy>().Initialize(_waypoints, _player);
+        return hover.gameObject;
+    }
+
     private bool TrySpawnEnemy(out GameObject result)
     {
         int index = _random.Next(_vehicles.Length);
@@ -36,13 +44,5 @@ public class EnemySpawner : ObjectPool
 
         result = null;
         return false;
-    }
-
-    protected override GameObject GetRandomContainer(Vehicle[] prefabs)
-    {
-        int index = _random.Next(prefabs.Length);
-        Hover hover = prefabs[index].BuildHover(transform, typeof(Player));
-        hover.gameObject.GetComponent<Enemy>().Initialize(_waypoints, _player);
-        return hover.gameObject;
     }
 }

@@ -6,14 +6,12 @@ public class Enemy : MonoBehaviour
 { 
     private AIStateMachine _stateMachine;
     private Hover _hover;
-    private EnemySpawner _spawner;
     private GameHandler _gameHandler;
 
     void Awake()
     {
         _hover = GetComponent<Hover> ();
         _hover.Health.Death += OnDeath;
-        _spawner = GetComponentInParent<EnemySpawner> ();
         _gameHandler = FindObjectOfType<GameHandler> ();
     }
 
@@ -30,7 +28,7 @@ public class Enemy : MonoBehaviour
         _stateMachine.Enable();
     }
 
-    public void OnDeath()
+    private void OnDeath()
     {
         _stateMachine.Disable();
         _gameHandler.EnemyDied.Invoke();

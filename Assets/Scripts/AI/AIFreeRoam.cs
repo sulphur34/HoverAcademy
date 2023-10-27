@@ -37,8 +37,6 @@ public class AIFreeRoam : AIState
             RotateToTarget();
         }
 
-        DrawPath();
-
         return this;
     }
 
