@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Cinemachine;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -36,6 +38,20 @@ public class SelectionMenu : MonoBehaviour
     {
         SetHoverValues();
         _enemiesNumberSlider.value = _defaultEnemiesNumber;
+    }
+
+    private void OnEnable()
+    {
+        var camera = Camera.main;
+        camera.GetComponent<CinemachineBrain>().enabled = false;
+        camera.transform.position = new Vector3(0f, 21.8f, 33.7f);
+        camera.transform.eulerAngles = new Vector3(12f, 180, 0);
+        _hoverSelectionPlatform.SetActive(true);
+    }
+
+    private void OnDisable()
+    {
+        _hoverSelectionPlatform.SetActive(false);
     }
 
     public void BeginGame()
@@ -81,12 +97,13 @@ public class SelectionMenu : MonoBehaviour
     private IEnumerator RotateSelectionPlatform(float angle)
     {
         _currentRotationAngle += angle;
-        Quaternion targetRotation = Quaternion.Euler(0,_currentRotationAngle, 0);
+        Quaternion targetRotation = Quaternion.Euler(0, _currentRotationAngle, 0);
 
-        while (_hoverSelectionPlatform.transform.rotation != targetRotation) 
+        while (_hoverSelectionPlatform.transform.rotation != targetRotation)
         {
-            _hoverSelectionPlatform.transform.rotation = 
-                Quaternion.RotateTowards(_hoverSelectionPlatform.transform.rotation, targetRotation, Time.deltaTime * _platformRotationSpeed);
+            _hoverSelectionPlatform.transform.rotation =
+                Quaternion.RotateTowards(_hoverSelectionPlatform.transform.rotation, targetRotation,
+                    Time.deltaTime * _platformRotationSpeed);
             yield return null;
         }
     }

@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Normaller
   m_EditorClassIdentifier: 
   _hoverPrefab: {fileID: -1749666552040649037, guid: e0087afd25a68a149a7388dfbca9adc2, type: 3}
-  _forwardSpeed: 500
-  _backwardSpeed: 100
-  _sideSpeed: 150
-  _brakeSpeed: 100
+  _forwardSpeed: 5000
+  _backwardSpeed: 5000
+  _sideSpeed: 5000
+  _brakeSpeed: 5000
   _maxVelocityMagnitude: 50
   _rotationSpeed: 0.05
   _engineMaxDistance: 20

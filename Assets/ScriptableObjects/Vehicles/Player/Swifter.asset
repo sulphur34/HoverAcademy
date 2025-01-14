@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Swifter
   m_EditorClassIdentifier: 
   _hoverPrefab: {fileID: 7812148195520530432, guid: 6eaeb3d54812bc444a235452a232d42b, type: 3}
-  _forwardSpeed: 500
-  _backwardSpeed: 500
-  _sideSpeed: 500
-  _brakeSpeed: 500
+  _forwardSpeed: 7000
+  _backwardSpeed: 7000
+  _sideSpeed: 7000
+  _brakeSpeed: 7000
   _maxVelocityMagnitude: 40
   _rotationSpeed: 0.1
   _engineMaxDistance: 20

@@ -40,6 +40,7 @@ public class GameHandler : MonoBehaviour
 
     private void GameBegan(float enemiesAmount, Vehicle playerVehicle)
     {
+        Camera.main.GetComponent<CinemachineBrain>().enabled = true;
         _enemiesToKill = enemiesAmount;
         _enemiesKilled = 0;
         _selectionMenu.gameObject.SetActive(false);
